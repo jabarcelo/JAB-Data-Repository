@@ -1,0 +1,84 @@
+To ensure reproducibility and clarity, below is a list of the key software packages and their exact versions used for this project. The environment was primarily developed and executed within a Google Colab instance, which provides a consistent cloud-based Python environment with GPU acceleration.
+
+Python Version: 3.12.12
+ultralytics: 8.3.225
+torch (PyTorch): 2.8.0+cu126 (with CUDA 12.6)
+torchvision: 0.23.0+cu126
+numpy: 2.0.2
+matplotlib: 3.10.0
+opencv-python: 4.12.0.88
+Pillow: 11.3.0
+PyYAML: 6.0.3
+requests: 2.32.4
+scipy: 1.16.3
+psutil: 5.9.5
+polars: 1.25.2
+ultralytics-thop: 2.0.18
+
+For easy installation of the direct dependencies, please find the requirements.txt content below. This can be used to set up a virtual environment or included in a Dockerfile.
+
+ultralytics==8.3.225
+torch==2.8.0+cu126
+torchvision==0.23.0+cu126
+numpy==2.0.2
+matplotlib==3.10.0
+opencv-python==4.12.0.88
+Pillow==11.3.0
+pyyaml==6.0.3
+requests==2.32.4
+scipy==1.16.3
+psutil==5.9.5
+polars==1.25.2
+ultralytics-thop==2.0.18
+
+
+Instructions for Reproduction
+
+To reproduce the results presented in the paper using Google Colab or a similar Python environment with GPU support, follow the steps below:
+1. Environment Setup (Recommended: Google Colab)
+  •	Open a new notebook in Google Colab.
+  •	Make sure GPU runtime is enabled:
+Runtime > Change runtime type > Hardware accelerator > GPU
+
+2. Installing Dependencies
+  Run the following command in a code cell to install the required libraries:
+    !pip install ultralytics==8.3.225 torch==2.8.0+cu126 torchvision==0.23.0+cu126 numpy==2.0.2 matplotlib==3.10.0 opencv-python==4.12.0.88 Pillow==11.3.0 pyyaml==6.0.3 requests==2.32.4 scipy==1.16.3 psutil==5.9.5 polars==1.25.2 ultralytics-thop==2.0.18
+  (Alternatively, you may simply run !pip install ultralytics, as it installs most dependencies automatically; however, specifying the versions as above ensures exact consistency with the experimental environment.)
+
+3. Uploading the Dataset and Configuration Files
+  •	Upload your dataset (e.g., dataset.Zuzan and an image folder such as Untitled Folder 1/) to the Colab environment.
+  •	You can do this either by dragging and dropping files into the Files panel (left sidebar) or by mounting Google Drive.
+
+4. Training the YOLOv8 Model
+  Run the following code cell to train the YOLOv8s model. You may adjust the dataset path and the number of epochs based on your requirements:
+    !yolo task=detect \
+    mode=train \
+    model=yolov8s.pt \
+    data=/content/dataset.Zuzan \
+    epochs=200 \
+    imgsz=800
+The trained model, including the best.pt file, will be saved at: runs/detect/train/weights/
+
+5. Running Inference (Prediction)
+    Use the following code cell to perform predictions on test images.
+    Ensure that the model path points to your trained model (e.g., /content/best.pt) and the source path is set to your image directory:
+      !yolo task=detect \
+      mode=predict \
+      model=/content/best.pt \
+      source='/content/Untitled Folder 1/' \
+      conf=0.01 \
+      save_conf=False \
+      show_conf=False
+  The results will be saved in a directory such as:
+      /content/runs/detect/predictX
+      (where X is an incrementing number).
+
+6. Downloading the Results
+    To download the predicted images with bounding boxes, first compress the results folder:
+      !zip -r /content/predict_results.zip /content/runs/detect/predict6
+      (Replace predict6 with the actual name of your results folder.)
+    Then download the ZIP file:
+      from google.colab import files
+      files.download('/content/predict_results.zip')
+
+By following these steps, you can fully reproduce the experimental environment and the results reported in the paper.
