@@ -2,6 +2,7 @@ This directory contains Images used for training and validation at the Zuzan cit
 
 READ.ME File: Relationship between code and figures and tables in the manuscript
 
+Please check the yolo8(2).ipynb file (alternatively the yolo8(4).txt which can be easier for just reading). 
 The YOLO model is trained using the script yolo/train.py, which processes the training data provided in the data/ directory.
 Model evaluation on the test dataset and the computation of quantitative performance metrics are performed using yolo/test.py.
 The quantitative results reported in the manuscript and presented in the tables are obtained from the outputs of yolo/test.py.
